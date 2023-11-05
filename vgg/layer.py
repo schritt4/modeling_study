@@ -35,15 +35,27 @@ class FC(nn.Module):
     def __init__(self, num_classes):
         super(FC, self).__init__()
 
-        self.fc_layers = nn.Sequential(
-            nn.Linear(512*7*7, 4096),
-            nn.ReLU(),
-            nn.Dropout(p=0.5),
-            nn.Linear(4096, 4096),
-            nn.ReLU(),
-            nn.Dropout(p=0.5),
-            nn.Linear(4096, num_classes)
-        )
+        if num_classes == 1:
+            self.fc_layers = nn.Sequential(
+                nn.Linear(512*7*7, 4096),
+                nn.ReLU(),
+                nn.Dropout(p=0.5),
+                nn.Linear(4096, 4096),
+                nn.ReLU(),
+                nn.Dropout(p=0.5),
+                nn.Linear(4096, num_classes),
+                nn.Sigmoid()
+            )
+        else:    
+            self.fc_layers = nn.Sequential(
+                nn.Linear(512*7*7, 4096),
+                nn.ReLU(),
+                nn.Dropout(p=0.5),
+                nn.Linear(4096, 4096),
+                nn.ReLU(),
+                nn.Dropout(p=0.5),
+                nn.Linear(4096, num_classes)
+            )
 
     def forward(self, x):
         return self.fc_layers(x)
